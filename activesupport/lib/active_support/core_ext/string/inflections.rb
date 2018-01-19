@@ -87,11 +87,15 @@ class String
   #   'active_record/errors'.camelize         # => "ActiveRecord::Errors"
   #   'active_record/errors'.camelize(:lower) # => "activeRecord::Errors"
   def camelize(first_letter = :upper)
-    case first_letter
+    case first_letter.to_s
     when :upper
       ActiveSupport::Inflector.camelize(self, true)
     when :lower
       ActiveSupport::Inflector.camelize(self, false)
+    when true, false
+      ActiveSupport::Inflector.camelize(self, first_letter)
+    else
+      raise ArgumentError, "You must provide a way to format the first letter"
     end
   end
   alias_method :camelcase, :camelize
